@@ -1,29 +1,40 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-function BlogCard({ post, onDelete }) {
+export default function BlogCard({ blog, onDelete }) {
   return (
-    <div className="bg-seashell border border-champagne rounded-lg p-4 shadow-sm">
-      <h2 className="text-xl font-bold text-grape mb-2">{post.title}</h2>
-      <p className="text-gray-800 mb-4">{post.description}</p>
-      <div className="flex space-x-2">
-        {/* Edit button as a link */}
-        <Link 
-          to={`/edit/${post.id}`} 
-          className="bg-grape text-seashell px-3 py-1 rounded hover:opacity-90"
+    <article className="group rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 p-5 hover:shadow-md transition">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h3 className="text-lg font-semibold tracking-tight text-slate-900 group-hover:text-slate-950">
+            {blog.title}
+          </h3>
+          <p className="mt-1 text-sm text-slate-600 line-clamp-2">{blog.description}</p>
+        </div>
+      </div>
+
+      <div className="mt-5 flex items-center gap-2">
+        <Link
+          to={`/new?id=${blog.id}`}
+          className="px-3 py-2 rounded-xl text-sm bg-slate-900 text-white hover:bg-black focus:ring-4 focus:ring-slate-200"
         >
           Edit
         </Link>
-        {/* Delete button */}
-        <button 
-          onClick={() => onDelete(post.id)} 
-          className="bg-rose text-white px-3 py-1 rounded hover:opacity-90"
+        <button
+          onClick={() => onDelete(blog.id)}
+          className="px-3 py-2 rounded-xl text-sm border border-slate-200 text-slate-700 hover:bg-slate-50"
         >
           Delete
         </button>
+        {blog.tags?.length ? (
+          <div className="ml-auto flex flex-wrap gap-2">
+            {blog.tags.map((t) => (
+              <span key={t} className="px-2 py-1 rounded-lg bg-slate-100 text-xs text-slate-700">
+                #{t}
+              </span>
+            ))}
+          </div>
+        ) : null}
       </div>
-    </div>
+    </article>
   );
 }
-
-export default BlogCard;

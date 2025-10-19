@@ -1,40 +1,28 @@
-import React, { useState } from "react";
-import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import NewBlog from "./pages/NewBlog";
-import EditBlog from "./pages/EditBlog";
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import BlogList from "./pages/BlogList";
+import NewBlog from "./pages/NewBlog";
 
-function App() {
-  const [blogs, setBlogs] = useState([]);
-
-  const addBlog = (newBlog) => {
-    setBlogs([...blogs, { ...newBlog, id: Date.now() }]);
-  };
-
-  const updateBlog = (updatedBlog) => {
-    setBlogs(blogs.map(blog => (blog.id === updatedBlog.id ? updatedBlog : blog)));
-  };
-
-  const deleteBlog = (id) => {
-    setBlogs(blogs.filter(blog => blog.id !== id));
-  };
-
+export default function App() {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-purple-400 via-pink-300 to-orange-200 text-gray-800">
-      <Navbar />
-      <main className="flex-1 px-4 sm:px-6 md:px-12 py-8">
+    <BrowserRouter>
+      <div className="min-h-screen bg-slate-50 text-slate-800">
+        <Navbar />
+
         <Routes>
-          <Route path="/" element={<Home blogs={blogs} onDelete={deleteBlog} />} />
-          <Route path="/new" element={<NewBlog onAdd={addBlog} />} />
-          <Route path="/edit/:id" element={<EditBlog blogs={blogs} onUpdate={updateBlog} />} />
+          <Route path="/" element={<BlogList />} />
+          <Route path="/new" element={<NewBlog />} />
+          {/* Fallback for unknown routes */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </main>
-      <footer className="bg-gray-900 text-white text-center p-4 mt-auto">
-        <p>© 2025 My Blog. All rights reserved.</p>
-      </footer>
-    </div>
+
+        <footer className="mt-16 border-t border-slate-200">
+          <div className="max-w-6xl mx-auto px-4 lg:px-6 py-8 text-sm text-slate-500">
+            © {new Date().getFullYear()} Blogify — built with React & Tailwind
+          </div>
+        </footer>
+      </div>
+    </BrowserRouter>
   );
 }
-
-export default App;
